@@ -1,10 +1,11 @@
-import React, { useReducer, useState } from 'react'
+import React, { useReducer } from 'react'
 import "../App.css";
 
 const initialState = {
   email: '',
   password: '',
   errors: {},
+  isSubmitting: false,
 }
 
 function reducer(state, action) {
@@ -17,9 +18,12 @@ function reducer(state, action) {
       return {
         ...state, errors: action.errors
       }
+    case 'submit' :
+      return {
+        ...state, isSubmitting: true,
+      }
     case 'reset':
       return initialState;
-
     default:
       return state;
   }
@@ -27,8 +31,7 @@ function reducer(state, action) {
 
 const Login = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-
+  
   const handleChange = (e) => {
    const {name, value} = e.target;
    dispatch({
@@ -52,9 +55,9 @@ const Login = () => {
     if (Object.keys(errs).length !== 0) {
       dispatch({type: 'setErrors', errors: errs})
     }else{
+      dispatch({type: 'submit'})
       alert('Login Succesful');
       dispatch({type: 'reset'})
-
     }
   }
 
